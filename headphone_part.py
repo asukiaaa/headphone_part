@@ -4,7 +4,7 @@ from Helpers import show
 ringHeight = 7.6
 ringWidth = 4.6
 ringTopWidth = 2.0
-ringTopSpaceHeight = 2.5
+ringTopSpaceHeight = 3.0
 ringBottomSpaceHeight = 0.8
 ringThickness = 1.3
 ringRadius = 31.0
@@ -15,7 +15,7 @@ holderBaseRadius = 9.8 / 2
 holderBaseHeight = ringWidth
 holderFookRadius = 3.7 / 2
 holderFookHeight = 5.0
-holderStopperWidth = 1.4
+holderStopperWidth = 1.3
 holderStopperHeight = 1.2
 holderStopperLength = 0.8
 
@@ -65,8 +65,13 @@ holderFook = cq.Workplane("YZ").circle(holderFookRadius)\
 holderStopper = cq.Workplane("YZ")\
     .box(holderStopperLength * 2, holderStopperWidth, holderStopperHeight)\
     .translate((-holderStopperHeight/2, -holderFookRadius, 0))
+holderCut = cq.Workplane("YZ")\
+    .box(holderBaseRadius, holderBaseRadius*2, ringWidth - ringThickness*2)\
+    .translate((ringWidth/2,
+                holderBaseRadius/2,
+                - holderBaseRadius*2 - ringThickness + ringHeight))
 holder = cq.Workplane("YZ").circle(holderBaseRadius).extrude(holderBaseHeight)\
-    .union(holderFook).union(holderStopper)
+    .union(holderFook).union(holderStopper).cut(holderCut)
 
 holderXOffset = ringRadius - (holderBaseHeight / 2) - 0.1
 holderZOffset = holderBaseRadius - 0.5
